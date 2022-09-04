@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import Header from "./components/Header";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import styled from "styled-components";
+import Categories from "./pages/Categories";
+import GlobalStyles from "./GlobalStyles";
+import SimpleRegistration from "./pages/SimpleRegistration";
 
-function App() {
+import "./App.css";
+import ProfilePage from "./pages/ProfilePage";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <GlobalStyles />
+      <Wrapper>
+        <Switch>
+          <Route exact path="/">
+            <Homepage />
+          </Route>
+          <Route exact path="/category/:categoryName">
+            <Categories />
+          </Route>
+          <Route exact path="/registration">
+            <SimpleRegistration />
+          </Route>
+          <Route exact path="/profile">
+            <ProfilePage />
+          </Route>
+        </Switch>
+      </Wrapper>
+    </BrowserRouter>
   );
-}
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 export default App;
