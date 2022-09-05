@@ -8,7 +8,8 @@ const PORT = 8000;
 const {
   getAllProducts,
   createUser,
-  getUser,
+  getUserInfo,
+  getAllUsers,
   getRealEstate,
   getTools,
   getToys,
@@ -41,12 +42,13 @@ app.use(express.urlencoded({ extended: false }));
 // {
 //   _id: uuid, key;
 // }
-// app.get("/api/get-user/:_id", getUser);
 app.post("/api/create-user", createUser);
+app.get("/api/get-users/", getAllUsers);
+app.get("/api/get-user-info/:_id", getUserInfo);
 app.get("/api/get-all-products", getAllProducts);
-// app.get("/api/get-realEstate", getRealEstate);
-// app.get("/api/get-tools", getTools);
-// app.get("/api/get-toys", getToys);
-// app.get("/api/get-vehicles", getVehicles);
+app.get("/api/get-realEstate", getRealEstate);
+app.get("/api/get-tools", getTools);
+app.get("/api/get-toys", getToys);
+app.get("/api/get-vehicles", getVehicles);
 // app.get("/api/find-item/:query", findItem);
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));

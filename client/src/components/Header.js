@@ -105,8 +105,10 @@ const LogInButton = styled.button`
 `;
 
 const ProfilePicture = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 45%;
+  height: auto;
+  border-radius: 50%;
+  margin-left: 5%;
 `;
 
 const Wrapper = styled.div`

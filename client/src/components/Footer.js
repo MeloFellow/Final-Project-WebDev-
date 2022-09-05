@@ -1,48 +1,49 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { HomeContext } from "../InformationProvider";
+import { InformationContext } from "../InformationProvider";
 import styled from "styled-components";
-import logo from "../assets/smartwear.-logo2.png";
+import logo from "../assets/NumeloLogo.jpg";
 import { SiFacebook, SiTwitter, SiLinkedin, SiInstagram } from "react-icons/si";
 
 const Footer = () => {
-  const { categories } = useContext(HomeContext);
+  const { categories } = useContext(InformationContext);
+
+  const otherPages = ["About", "Help", "Terms of Service", "Work for Us"];
 
   return (
     <Wrapper>
       <ContentContainer>
         <Logo src={logo} />
-        <Categories>
-          {categories.map((category, index) => {
+        <Pages>
+          {otherPages.map((page, index) => {
             return (
               <StyledLink
-                to={`/category/${category.toLowerCase()}`}
+                to={`/${otherPages}`}
                 key={index}
                 onClick={() => window.scrollTo(0, 0)}
               >
-                <li key={index}>{category.toUpperCase()}</li>
+                <li key={index}>{page}</li>
               </StyledLink>
             );
           })}
-        </Categories>
+        </Pages>
+        <SocialsContainer>
+          <IconsWrapper>
+            <FacebookIcon />
+            <TwitterIcon />
+            <LinkedinIcon />
+            <InstagramIcon />
+          </IconsWrapper>
+        </SocialsContainer>
       </ContentContainer>
-      <SocialsContainer>
-        <IconsWrapper>
-          <FacebookIcon />
-          <TwitterIcon />
-          <LinkedinIcon />
-          <InstagramIcon />
-        </IconsWrapper>
-        <Copyright>© Copyright 2022. All rights reserved.</Copyright>
-      </SocialsContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 220px;
-  background-color: rgba(41, 41, 41, 0.1);
+  /* height: 220px; */
+  background-color: #457b9dff;
   padding: 30px 45px;
 `;
 
@@ -52,7 +53,7 @@ const ContentContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 70px;
+  /* height: 70px; */
   border-bottom: 1px solid #fff;
 `;
 
@@ -98,20 +99,15 @@ const InstagramIcon = styled(SiInstagram)`
   margin: 0 10px;
 `;
 
-const Copyright = styled.p`
-  font-family: var(--font-family);
-  color: var(--primary-color);
-  font-size: 12px;
-  margin-top: 20px;
-`;
-
 const IconsWrapper = styled.div``;
 
-const Categories = styled.ul`
+const Pages = styled.ul`
   text-align: right;
   margin-bottom: 10px;
 
   & li {
+    font-size: 1.4em;
+    color: white;
     display: inline;
     font-family: var(--font-family);
     letter-spacing: -0.05em;

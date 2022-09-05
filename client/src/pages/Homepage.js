@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import styled from "styled-components";
 import { useContext, useEffect } from "react";
 import { InformationContext } from "../InformationProvider";
@@ -54,6 +55,7 @@ const Homepage = () => {
         <Header />
       </Container>
       <HomepageItems></HomepageItems>
+      <Footer></Footer>
     </Wrapper>
   );
 };

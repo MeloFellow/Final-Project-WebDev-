@@ -19,7 +19,7 @@ const App = () => {
           <Route exact path="/">
             <Homepage />
           </Route>
-          <Route exact path="/category/:categoryName">
+          <Route exact path="/category/:category">
             <Categories />
           </Route>
           <Route exact path="/registration">
