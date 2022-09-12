@@ -8,57 +8,50 @@ import ItemCard from "../components/ItemCard";
 import HomepageItems from "../components/HomepageItems";
 
 const Homepage = () => {
-  const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
   const data = useContext(InformationContext);
-  const { latestUser, setLatestUser } = data;
-  setLatestUser(user);
+  const { latestUser, setLatestUser, user } = data;
 
-  useEffect(() => {
-    console.log("User in use effect", user);
-    if (user) {
-      createUserinDb(user).then((res) => {});
-    }
-  }, [latestUser]);
+  // useEffect(() => {
+  //   console.log("User in use effect", user);
+  //   if (user) {
+  //     console.log("inside the if");
+  //     setLatestUser(user);
+  //     createUserinDb(user).then((res) => {});
+  //   }
+  // }, []);
 
-  const createUserinDb = async (user) => {
-    const result = new Promise((resolve, reject) => {
-      try {
-        const body = {
-          firstName: user.given_name,
-          lastName: user.family_name,
-          email: user.email,
-        };
-
-        fetch("/api/create-user", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        })
-          .then(function (res) {
-            return res.json();
-          })
-          .then((data) => resolve(data));
-      } catch (err) {
-        console.log(err, "Error");
-        reject(err);
-      }
-    });
-    return result;
-  };
+  // const createUserinDb = async (user) => {
+  //   try {
+  //     const body = {
+  //       firstName: user.given_name,
+  //       lastName: user.family_name,
+  //       email: user.email,
+  //     };
+  //     const rawRes = await fetch("/api/create-user", {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(body),
+  //     });
+  //     const res = await rawRes.json();
+  //     console.log("res", res);
+  //   } catch (err) {
+  //     console.log(err, "Error");
+  //   }
+  // };
 
   return (
     <Wrapper>
-      <Container>
-        <Header />
-      </Container>
       <HomepageItems></HomepageItems>
-      <Footer></Footer>
     </Wrapper>
   );
 };
+const Image = styled.img`
+  height: 500px;
+  width: auto;
+`;
 
 const Wrapper = styled.div`
   display: flex;

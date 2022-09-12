@@ -1,23 +1,25 @@
-import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 // import cartIcon from "../assets/cart.svg";
 // import viewIcon from "../assets/search.svg";
-import imgSrc from "../assets/NumeloLogo.jpg";
+
+import search from "../assets/view.svg";
 
 const ItemCard = ({ itemInformation }) => {
-  console.log("ITEM INFORMATION", itemInformation);
+  const history = useHistory();
+
+  const _id = itemInformation._id;
+
+  const goToItem = () => {
+    history.push(`/items/${_id}`);
+  };
 
   return (
     <Wrapper>
       <Overlay>
         <ButtonWrapper>
-          <CartButton>
-            <OverlayIcon src={imgSrc}></OverlayIcon>
-          </CartButton>
-
           <SearchButton>
-            <OverlayIcon src={imgSrc}></OverlayIcon>
+            <OverlayIcon onClick={goToItem} src={search}></OverlayIcon>
           </SearchButton>
         </ButtonWrapper>
       </Overlay>
@@ -25,37 +27,47 @@ const ItemCard = ({ itemInformation }) => {
       <ProductCardWrapper>
         <UpperContainer>
           <ImageWrapper>
-            <ItemImage src={itemInformation.imageSrc}></ItemImage>
+            <ItemImage src={`/images/${itemInformation.imageSrc}`}></ItemImage>
           </ImageWrapper>
-          <ItemName>{itemInformation.name}</ItemName>
-          <ItemDescription>{itemInformation.condition}</ItemDescription>
+          <NameWrapper>
+            <ItemName>{itemInformation.name}</ItemName>
+            <ItemDescription>{itemInformation.condition}</ItemDescription>
+            <Category>{itemInformation.category}</Category>
+            <Line />
+            <PriceWrapper>
+              <Price>${itemInformation.price}</Price>
+            </PriceWrapper>
+          </NameWrapper>
         </UpperContainer>
-        <LowerContainer>
-          <Category>{itemInformation.category}</Category>
-          <Line />
-
-          <PriceWrapper>
-            <Price>{itemInformation.price}</Price>
-          </PriceWrapper>
-        </LowerContainer>
+        <LowerContainer></LowerContainer>
       </ProductCardWrapper>
     </Wrapper>
   );
 };
 
-const OverlayIcon = styled.img`
-  width: 24px;
-  height: 24px;
+const NameWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
-const UpperContainer = styled.div``;
+const OverlayIcon = styled.img`
+  width: 50px;
+  height: 50px;
+  z-index: 9999;
+`;
 
-const LowerContainer = styled.div``;
+const UpperContainer = styled.div`
+  margin-bottom: -50px;
+`;
+
+const LowerContainer = styled.div`
+  margin-top: -50px;
+`;
 
 const Line = styled.div`
-  width: 100%;
-  border-bottom: 1px solid var(--lightest-grey);
-  margin: 18px 0;
+  width: 80%;
+  border-bottom: 1px solid #a8dadcff;
+  margin: 5px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -67,29 +79,18 @@ const ButtonWrapper = styled.div`
   justify-content: center;
 `;
 
-const CartButton = styled.button`
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  border: none;
-  margin: 8px;
-  transition: 0.2s ease;
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-  }
-`;
-
 const SearchButton = styled.button`
-  width: 65px;
-  height: 65px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   border: none;
   margin: 8px;
   transition: 0.2s ease;
+  z-index: 9999;
   &:hover {
     cursor: pointer;
     transform: scale(1.1);
+    z-index: 9999;
   }
 `;
 
@@ -114,23 +115,24 @@ const Overlay = styled.span`
 
 const Wrapper = styled.div`
   position: relative;
-  width: 288px;
-  height: 440px;
+  width: 300px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 
   &:hover ${Overlay} {
-    opacity: 1;
+    opacity: 0.5;
+    background-color: #a8dadcff;
   }
 `;
 
 const Category = styled.h2`
   font-family: var(--font-family);
-  font-weight: 400;
-  color: var(--light-grey);
-  margin-top: 20px;
+  font-weight: 900;
+  color: #457b9dff;
+  margin-top: 3%;
 `;
 
 const Price = styled.h1`
@@ -153,7 +155,10 @@ const ItemName = styled.h1`
   margin-top: 20px;
 `;
 
-const ItemImage = styled.img``;
+const ItemImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+`;
 
 const PriceWrapper = styled.div`
   display: flex;
@@ -162,10 +167,10 @@ const PriceWrapper = styled.div`
 const ProductCardWrapper = styled.span`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
   height: 100%;
-  padding: 30px;
+  padding: 8%;
   box-sizing: border-box;
   border: 1px solid var(--lightest-grey);
   /* box-shadow: 0px 8px 17px -3px rgba(24, 39, 75, 0.07); */

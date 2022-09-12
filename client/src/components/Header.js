@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import { InformationContext } from "../InformationProvider";
 import styled from "styled-components";
@@ -9,17 +9,9 @@ import LoginButton from "./LoginButton";
 const Header = () => {
   const data = useContext(InformationContext);
 
-  const { latestUser } = data;
-
-  console.log("THIS IS CURRENT USER LOGGED IN", latestUser);
-
-  const [profileImage, setProfileImage] = useState();
-
-  // useEffect(() => {
-  //   setProfileImage(latestUser.picture);
-  // }, [latestUser]);
-
-  console.log("profile image", profileImage);
+  const { latestUser, logout, currentUserId } = data;
+  const pathname = window.location.pathname;
+  console.log("PATH NAME", pathname);
 
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
@@ -78,10 +70,39 @@ const Header = () => {
           <SearchButton onClick={() => history.push(`/search/${searchText}`)} />
         </SearchContainer>
         {latestUser ? (
-          <Link to={"/profile"}>
-            <ProfilePicture src={latestUser.picture} />
-          </Link>
+          <>
+            {/* <FontAwesomeIcon icon={faEnvelope} /> */}
+            <Dropdown>
+              <DropdowButton onClick={() => console.log("Im here")}>
+                <FaUserAlt
+                  color="#457b9dff"
+                  background-color="yellow"
+                  size={30}
+                  icon="fa-solid fa-user fa-lg fa-3x"
+                />
+
+                <DropdownContentWrapper>
+                  <DropDownContent to={`/profile/${currentUserId}`}>
+                    Profile
+                  </DropDownContent>
+                  <DropDownContent to={"/profile"}>Messages</DropDownContent>
+                  <DropDownContent onClick={() => logout()} to={"/"}>
+                    Logout
+                  </DropDownContent>
+                </DropdownContentWrapper>
+              </DropdowButton>
+            </Dropdown>
+            {pathname !== "/postad" ? (
+              <Link to={"/postad"}>
+                <PostAd>Post Ad</PostAd>
+              </Link>
+            ) : (
+              <></>
+            )}
+          </>
         ) : (
+          // <Link to={"/profile"}>
+          // </Link>
           <LoginButton></LoginButton>
           // <Icon>
           //   <FaUserAlt />
@@ -92,23 +113,70 @@ const Header = () => {
   );
 };
 
-const LogInButton = styled.button`
-  width: 25%;
-  height: auto;
+const PostAd = styled.button`
+  width: 120%;
+  height: 30px;
   border: none;
-  border-radius: 5px;
-  font-size: 17px;
-  font-weight: 600;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 500;
   color: #fff;
-  background-color: #1859c9;
+  background-color: #e63946ff;
   cursor: pointer;
 `;
 
-const ProfilePicture = styled.img`
+const DropdownContentWrapper = styled.div`
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+`;
+
+const Dropdown = styled.div`
+  position: relative;
+  display: inline-block;
+  &:hover {
+    display: block;
+  }
+`;
+
+const DropdowButton = styled.button`
+  /* background-color: #04aa6d; */
   width: 45%;
   height: auto;
   border-radius: 50%;
   margin-left: 5%;
+  color: black;
+  border: none;
+  z-index: 999;
+  &:hover {
+    ${DropdownContentWrapper} {
+      display: block;
+    }
+  }
+`;
+
+const DropDownContent = styled(NavLink)`
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 1.2em;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+
+  &:hover {
+    background-color: #a8dadcff;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -118,8 +186,10 @@ const Wrapper = styled.div`
   align-items: center;
   margin-top: 30px;
   margin-bottom: 10px;
-  width: 100%;
+  width: 80%;
   height: 40px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const Navigation = styled.div`
@@ -215,20 +285,4 @@ const SearchButton = styled.button`
   cursor: pointer;
 `;
 
-const Icon = styled.span`
-  position: relative;
-  &::after {
-    content: attr(value);
-    position: absolute;
-    top: -15px;
-    right: -10px;
-    font-family: var(--font-family);
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    border-radius: 50px;
-    background-color: var(--pink);
-    padding: 3px 6px;
-  }
-`;
 export default Header;

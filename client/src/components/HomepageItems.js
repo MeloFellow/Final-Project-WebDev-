@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ItemCard from "./ItemCard";
 import { InformationContext } from "../InformationProvider";
-
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 const HomepageItems = () => {
   const data = useContext(InformationContext);

@@ -13,7 +13,6 @@ root.render(
     redirectUri={window.location.origin}
   >
     <InformationProvider>
-      {/* <div>hello</div> */}
       <App />
     </InformationProvider>
   </Auth0Provider>

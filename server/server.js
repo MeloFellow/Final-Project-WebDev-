@@ -1,9 +1,22 @@
 "use strict";
 
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const PORT = 8000;
+const { MongoClient } = require("mongodb");
+const { MONGO_URI } = process.env;
+
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+const { uploadFile, getFileStream } = require("./s3");
 
 const {
   getAllProducts,
@@ -14,23 +27,14 @@ const {
   getTools,
   getToys,
   getVehicles,
-  findItem,
+  postItem,
+  getItem,
+  editUser,
+  getUserItems,
 } = require("./handlers/handlers");
 
 const app = express();
-// What does this actually mean
-// .use(function (req, res, next) {
-//   res.header(
-//     "Access-Control-Allow-Methods",
-//     "OPTIONS, HEAD, GET, PUT, POST, DELETE"
-//   );
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// })
-// What does this actually mean
+
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
@@ -42,13 +46,32 @@ app.use(express.urlencoded({ extended: false }));
 // {
 //   _id: uuid, key;
 // }
+
+// this endpoints will request the image from S3
+app.get("/images/:key", async (req, res) => {
+  console.log(req.params);
+  try {
+    const { key } = await req.params;
+    console.log(key);
+    const readStream = getFileStream(key);
+    readStream.pipe(res);
+  } catch {
+    return res.status(404);
+  }
+});
+
+// CREATE HANDLER TO POST ITEM IMAGE KEY, WILL BE MOVED TO HANDLERS
+app.post("/api/post-item", upload.single("image"), postItem);
+app.get("/api/get-user-items/:_id", getUserItems);
 app.post("/api/create-user", createUser);
 app.get("/api/get-users/", getAllUsers);
 app.get("/api/get-user-info/:_id", getUserInfo);
-app.get("/api/get-all-products", getAllProducts);
-app.get("/api/get-realEstate", getRealEstate);
+app.get("/api/get-all", getAllProducts);
+app.get("/api/get-realestate", getRealEstate);
 app.get("/api/get-tools", getTools);
 app.get("/api/get-toys", getToys);
 app.get("/api/get-vehicles", getVehicles);
-// app.get("/api/find-item/:query", findItem);
+app.get("/api/get-item/:_id", getItem);
+app.patch("/api/edit-user", editUser);
+
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));

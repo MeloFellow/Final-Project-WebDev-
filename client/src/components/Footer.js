@@ -42,7 +42,12 @@ const Footer = () => {
 
 const Wrapper = styled.div`
   width: 100%;
-  /* height: 220px; */
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  color: white;
+  text-align: center;
   background-color: #457b9dff;
   padding: 30px 45px;
 `;

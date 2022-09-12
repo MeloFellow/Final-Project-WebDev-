@@ -9,14 +9,12 @@ export default createGlobalStyle`
       --orange: #FED79C;
       --green: #75C269;
       --pink: #DB6A86;
+      --hover-white: rgb(255, 255, 255, 0.0);
       --hover-black: rgb(0, 0, 0, 0.3);
       --border : #E6E6E6;
 
       --font-family: 'Roboto', sans-serif;
-      --logo-font: 40px;
-      --slider-title-font: 70px;
-      --slider-content-font: 20px;
-      
+      --logo-font: 40px;      
       --content-width: 1240px;
     }
 
@@ -67,7 +65,7 @@ export default createGlobalStyle`
    
 
     h1 {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     h2 {

@@ -1,26 +1,25 @@
-import Header from "../components/Header";
 import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { InformationContext } from "../InformationProvider";
 
 const LoginButton = () => {
   const data = useContext(InformationContext);
 
-  const { latestUser, setLatestUser } = data;
+  const { setLatestUser } = data;
 
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
 
-  setLatestUser(user);
-
-  const loginUser = user;
-
-  window.localStorage.setItem("user", loginUser);
+  useEffect(() => {
+    setLatestUser(user);
+  }, [user]);
 
   const handleLogin = () => {
     loginWithRedirect({
       redirect_uri: "http://localhost:3000/",
-    }).then((res) => console.log("RESPONSE", res));
+    })
+      .then((res) => console.log("RESPONSE", res))
+      .then(window.localStorage.setItem("user", user));
   };
 
   return (
@@ -38,14 +37,14 @@ const Wrapper = styled.div`
 `;
 
 const Login = styled.button`
-  width: 100%;
-  height: 55px;
+  width: 50%;
+  height: 30px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 17px;
   font-weight: 600;
   color: #fff;
-  background-color: #1859c9;
+  background-color: #e63946ff;
   cursor: pointer;
 `;
 
