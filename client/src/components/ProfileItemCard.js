@@ -1,8 +1,5 @@
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-// import cartIcon from "../assets/cart.svg";
-// import viewIcon from "../assets/search.svg";
-
 import search from "../assets/view.svg";
 
 const ProfileItemCard = ({ itemInformation }) => {
@@ -71,11 +68,7 @@ const ButtonWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: row;
-  /* align-items: center; */
   justify-content: right;
-  /* background-color: blue; */
-  /* margin-right: 200px; */
-  /* right: 15%; */
 `;
 
 const SearchButton = styled.button`
@@ -99,12 +92,13 @@ const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 25%;
   max-width: 40%;
   height: 100%;
 `;
 
 const ItemImage = styled.img`
-  width: 90%;
+  width: 100%;
   height: 100%;
 `;
 
@@ -123,7 +117,6 @@ const Wrapper = styled.div`
   position: relative;
   width: 100%;
   height: 300px;
-  /* max-height: 15%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,7 +132,6 @@ const Wrapper = styled.div`
   }
 
   &:hover ${SearchButton} {
-    /* opacity: 0.5; */
     background-color: white;
   }
 `;
@@ -159,7 +151,6 @@ const Price = styled.h1`
 const ItemDescription = styled.h2`
   width: 228px;
   color: black;
-  /* height: 60px; */
   font-family: var(--font-family);
   font-weight: 400;
   line-height: 125%;
@@ -178,13 +169,11 @@ const PriceWrapper = styled.div`
 const ProductCardWrapper = styled.span`
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
   width: 100%;
   height: 100%;
   padding: 4%;
   box-sizing: border-box;
   border: 1px solid var(--lightest-grey);
-  /* box-shadow: 0px 8px 17px -3px rgba(24, 39, 75, 0.07); */
   border-radius: 7px;
   background-color: #fff;
 `;

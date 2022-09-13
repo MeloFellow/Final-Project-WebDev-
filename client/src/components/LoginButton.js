@@ -8,7 +8,7 @@ const LoginButton = () => {
 
   const { setLatestUser } = data;
 
-  const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
+  const { loginWithRedirect, user } = useAuth0();
 
   useEffect(() => {
     setLatestUser(user);
@@ -30,14 +30,19 @@ const LoginButton = () => {
 };
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  text-align: center;
   width: 100%;
 `;
 
 const Login = styled.button`
-  width: 50%;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
   height: 30px;
   border: none;
   border-radius: 10px;

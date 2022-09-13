@@ -3,25 +3,29 @@ import styled from "styled-components";
 import ItemCard from "./ItemCard";
 import { InformationContext } from "../InformationProvider";
 import { useContext } from "react";
+import { useEffect, useState } from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
 const HomepageItems = () => {
   const data = useContext(InformationContext);
-  const { allItems, setAllItems } = data;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { allItems } = data;
 
-  const load = true;
-
-  console.log("All items on homepage", allItems);
+  useEffect(() => {
+    setIsLoaded(true);
+  }, [allItems]);
 
   return (
     <Wrapper>
-      {load ? (
+      {isLoaded ? (
         allItems.map((itemInformation, index) => {
           return <ItemCard itemInformation={itemInformation} key={index} />;
         })
       ) : (
-        <></>
+        <>
+          <LoadingSpinner />
+        </>
       )}
-      )
     </Wrapper>
   );
 };

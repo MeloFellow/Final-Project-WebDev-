@@ -10,17 +10,12 @@ const SimpleRegistration = () => {
 
   const { latestUser, setLatestUser } = data;
 
-  console.log("this is the data", data);
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
 
   setLatestUser(user);
-  console.log("this is the latest user", latestUser);
-  console.log("user", user);
-  console.log("is authenticated", isAuthenticated);
-  // console.log("user", user)
 
   const loginUser = user;
-  console.log(loginUser);
+
   window.localStorage.setItem("user", loginUser);
 
   const handleLogin = () => {

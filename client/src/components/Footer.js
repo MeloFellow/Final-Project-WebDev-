@@ -1,13 +1,9 @@
-import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { InformationContext } from "../InformationProvider";
 import styled from "styled-components";
 import logo from "../assets/NumeloLogo.jpg";
 import { SiFacebook, SiTwitter, SiLinkedin, SiInstagram } from "react-icons/si";
 
 const Footer = () => {
-  const { categories } = useContext(InformationContext);
-
   const otherPages = ["About", "Help", "Terms of Service", "Work for Us"];
 
   return (
@@ -42,10 +38,9 @@ const Footer = () => {
 
 const Wrapper = styled.div`
   width: 100%;
-  position: fixed;
   left: 0;
   bottom: 0;
-
+  margin-top: auto;
   color: white;
   text-align: center;
   background-color: #457b9dff;
@@ -58,7 +53,6 @@ const ContentContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  /* height: 70px; */
   border-bottom: 1px solid #fff;
 `;
 

@@ -3,8 +3,6 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { InformationContext } from "../InformationProvider";
 import { useContext } from "react";
-import Header from "../components/Header";
-// import { useAuth0 } from "@auth0/auth0-react";
 
 const PostAd = () => {
   const data = useContext(InformationContext);
@@ -44,17 +42,19 @@ const PostAd = () => {
     formData.append("mileage", mileage);
     formData.append("available", available);
     formData.append("owner", currentUserId);
-
+    console.log("FORM DATA", formData);
     const response = await fetch("/api/post-item", {
       method: "POST",
       body: formData,
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Accept: "application/json",
-      //   },
     });
-    // .then(// if status is 200 then make a popup that says success).catch(// if caught an error, display popup error try again);
+
+    if (response.status === 200) {
+      history.push("/confirmed");
+      return response;
+    }
+    console.log("RESPONSE", response.status);
     console.log("RESPONSE", response);
+    console.log("RESPONSE Data", response);
     return response;
   };
 
@@ -77,31 +77,24 @@ const PostAd = () => {
 
   const formValidation = (event) => {
     event.preventDefault();
-    //   let flag1 = false;
-    //   if (year < 1900 || (year > 2022 && year !== "")) {
-    //     flag1 = true;
-    //     alert("Year must be between '1900' and '2022'");
-    //     return false;
-    //   } else {
     postAdInformation();
-    //   }
   };
 
   return (
     <>
-      {/* <Header></Header> */}
       <Background />
       <FormWrapper>
         <Form onSubmit={formValidation}>
-          <UserFormLabel>Name</UserFormLabel>
+          <UserFormLabel>Ad Name</UserFormLabel>
           <Input
             type="text"
             id="Name"
-            placeholder="Ad Name"
+            placeholder="Be Engaging!"
             minLength={8}
             maxLength={50}
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
           <UserFormLabel>Category</UserFormLabel>
           <Dropdown
@@ -110,6 +103,7 @@ const PostAd = () => {
             placeholder="Category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            required
           >
             <option value="">Select Category</option>
             <option value="Real Estate">Real Estate</option>
@@ -131,7 +125,7 @@ const PostAd = () => {
                 event.preventDefault();
               }
             }}
-            // value={lastName}
+            required
           />
           <UserFormLabel>Location</UserFormLabel>
           <Input
@@ -142,6 +136,7 @@ const PostAd = () => {
             minLength={8}
             maxLength={80}
             onChange={(e) => setLocation(e.target.value)}
+            required
           />
           <UserFormLabel>Image</UserFormLabel>
           <UploadFile
@@ -150,9 +145,10 @@ const PostAd = () => {
             id="image"
             placeholder="Image"
             onChange={fileSelected}
+            required
           />
           <UserFormLabel>Description</UserFormLabel>
-          <Input
+          <Description
             type="text"
             id="description"
             placeholder="Description"
@@ -160,8 +156,9 @@ const PostAd = () => {
             maxLength={500}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            required
           />
-          {category === "Real Estate" ? (
+          {category === "Real Estate" || category === "" ? (
             <></>
           ) : (
             <>
@@ -172,6 +169,7 @@ const PostAd = () => {
                 placeholder="Condition"
                 value={condition}
                 onChange={(e) => setCondition(e.target.value)}
+                required
               >
                 <option value="">Select Condition</option>
                 <option value="New">New</option>
@@ -188,6 +186,7 @@ const PostAd = () => {
                 placeholder="Size"
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
+                required
               >
                 <option value="">Select Size</option>
                 <option value="2.5">Studio</option>
@@ -211,6 +210,7 @@ const PostAd = () => {
                 min={1900}
                 max={2022}
                 onChange={handleYearChange}
+                required
               ></Input>
             </>
           ) : (
@@ -222,11 +222,12 @@ const PostAd = () => {
               <Input
                 type="number"
                 id="mileage"
-                placeholder="Year"
+                placeholder="Mileage"
                 value={mileage}
                 onChange={handleMileageChange}
                 min={0}
                 max={999999}
+                required
               ></Input>
             </>
           ) : (
@@ -248,19 +249,13 @@ const PostAd = () => {
 
 const FormWrapper = styled.div`
   position: absolute;
-  width: 592px;
-  height: 512px;
-  left: 50%;
-  top: 50%;
-  background-color: #fff;
-  margin-left: -296px; /*image width/2 */
-  margin-top: -256px; /*image height/2 */
+  top: 20%;
 `;
 
 const Background = styled.div`
   height: 100vh;
   width: 100%;
-  background: #0f2027; /* fallback for old browsers */
+  background: #0f2027;
   background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
   display: flex;
   justify-content: center;
@@ -272,117 +267,132 @@ const Background = styled.div`
 const UserFormLabel = styled.label`
   margin-left: 20px;
   margin-right: 5px;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 10px;
 `;
 
 const ConfirmButton = styled.button`
-  display: inline-block;
-  width: 100%;
-  font: normal normal 300 1.3em "Open Sans";
-  text-decoration: none;
-
-  color: #457b9dff;
-  brackground-color: transparent;
-  border: 1px solid #457b9dff;
-  border-radius: 100px;
-
-  padding: 0.3em 1.2em;
-  margin: 5px;
-
-  background-size: 200% 100%;
-  background-image: linear-gradient(to right, transparent 50%, #f1faeeff, 50%);
-  transition: background-position 0.3s cubic-bezier(0.19, 1, 0.22, 1) 0.1s,
-    color 0.5s ease 0s, background-color 0.5s ease;
-
+  background-color: #457b9dff;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-right: auto;
+  text-align: center;
+  width: 80%;
   :hover {
     color: rgba(255, 255, 255, 1);
-    background-color: #457b9dff;
+    background-color: #1ad88c;
     background-position: -100% 100%;
   }
 `;
 
 const UploadFile = styled.input`
-  font-family: "Roboto", sans-serif;
-  color: #333;
-  font-size: 1rem;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  /* border: 1px solid; */
-  width: 200%;
-  display: block;
-  /* border-bottom: 0.3rem solid transparent; */
   transition: all 0.3s;
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 18px;
+  height: 10%;
+  outline: 0;
+  padding: 10px 20px 10px;
+  width: 100%;
+  margin-bottom: 10px;
+`;
+
+const Description = styled.textarea`
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  height: 100px;
+  outline: 0;
+  padding: 10px 20px 10px;
+  width: 100%;
+  margin-bottom: 10px;
 `;
 
 const Input = styled.input`
-  font-family: "Roboto", sans-serif;
-  color: #333;
-  font-size: 1rem;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid;
-  width: 200%;
-  display: block;
-  height: 10px;
-  /* border-bottom: 0.3rem solid transparent; */
-  transition: all 0.3s;
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 18px;
+  height: 20%;
+  outline: 0;
+  padding: 10px 20px 10px;
+  width: 100%;
+  margin-bottom: 10px;
 `;
 
 const Condition = styled.select`
-  font-family: "Roboto", sans-serif;
-  color: #333;
-  font-size: 1rem;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid;
-  width: 200%;
-  display: block;
-  /* border-bottom: 0.3rem solid transparent; */
-  transition: all 0.3s;
+  margin-bottom: 10px;
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 18px;
+  height: 10%;
+  outline: 0;
+  padding: 10px 20px 10px;
+  width: 100%;
 `;
 
 const Size = styled.select`
-  font-family: "Roboto", sans-serif;
-  color: #333;
-  font-size: 1rem;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid;
-  width: 200%;
-  display: block;
-  /* border-bottom: 0.3rem solid transparent; */
   transition: all 0.3s;
+  margin-bottom: 10px;
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 18px;
+  height: 10%;
+  outline: 0;
+  padding: 10px 20px 10px;
+  width: 100%;
+  padding: 20px 20px 20px;
 `;
 
 const Dropdown = styled.select`
-  font-family: "Roboto", sans-serif;
-  color: #333;
-  font-size: 1rem;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
-  border-radius: 0.2rem;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid;
-  width: 200%;
-  display: block;
-  /* border-bottom: 0.3rem solid transparent; */
   transition: all 0.3s;
+  margin-bottom: 10px;
+  background-color: #303245;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 18px;
+  height: 10%;
+  outline: 0;
+  padding: 10px 20px 10px;
+  width: 100%;
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  border: 3px solid var(--color-alabama-crimson);
-  padding: 1%;
-  width: 40%;
-  align-items: center;
+  background-color: #15172b;
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 20px;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export default PostAd;

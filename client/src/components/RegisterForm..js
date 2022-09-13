@@ -12,8 +12,4 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const Container = styled.div`
-  width: 80%;
-`;
-
 export default RegistrationForm;

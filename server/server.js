@@ -7,6 +7,8 @@ const cors = require("cors");
 const PORT = 8000;
 const { MongoClient } = require("mongodb");
 const { MONGO_URI } = process.env;
+const app = express();
+const http = require("http");
 
 const options = {
   useNewUrlParser: true,
@@ -31,21 +33,13 @@ const {
   getItem,
   editUser,
   getUserItems,
+  findProducts,
 } = require("./handlers/handlers");
-
-const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//   .use("/", express.static(__dirname + "/"))
-
-// app.get("/images/:key", function(req, res)
-
-// {
-//   _id: uuid, key;
-// }
 
 // this endpoints will request the image from S3
 app.get("/images/:key", async (req, res) => {
@@ -72,6 +66,6 @@ app.get("/api/get-tools", getTools);
 app.get("/api/get-toys", getToys);
 app.get("/api/get-vehicles", getVehicles);
 app.get("/api/get-item/:_id", getItem);
-app.patch("/api/edit-user", editUser);
-
+app.post("/api/edit-user/:_id", upload.single("image"), editUser);
+app.get("/api/find-products/:query", findProducts);
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));

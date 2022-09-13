@@ -1,51 +1,106 @@
 import React from "react";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink, Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import testimage from "../assets/NumeloLogo.jpg";
 import nolisting from "../assets/Nolistings.jpg";
 import ProfileItems from "../components/ProfileItems";
 import { InformationContext } from "../InformationProvider";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { FaUserAlt } from "react-icons/fa";
+import LoadingSpinner from "../components/LoadingSpinner";
+
 const ProfilePage = () => {
-  const imageSrc = testimage;
   const noListing = nolisting;
   const data = useContext(InformationContext);
   const { latestUser } = data;
+  const [isLoaded, setLoaded] = useState(false);
+  const [profileInfo, setProfileInfo] = useState([]);
   console.log("Latest User", latestUser);
-  return (
-    <Container>
-      <PageContentWrapper>
-        <ProfileContent>
-          <ProfilePhoto>
-            <UserIcon />
-          </ProfilePhoto>
-          {latestUser.email_verified ? (
-            <Verified>Verified</Verified>
-          ) : (
-            <Unverified>Unverified</Unverified>
-          )}
-          <Name>{latestUser.name}</Name>
-          <Email>{latestUser.email}</Email>
-          {/* <PhoneNumber>514-574-0753</PhoneNumber> */}
-          <EditProfile>Edit Profile</EditProfile>
-        </ProfileContent>
+  const { _id } = useParams();
 
-        {/* <MyAds>
-          <NoListingSection>
-            <NoListingImage src={noListing}></NoListingImage>
-            <NoAdsFound>No Listings Found :( </NoAdsFound>
-            <StyledLink to={"/postad"}>
-              <PostAnAd>Click Here To Post An Ad Now! </PostAnAd>
-            </StyledLink>
-          </NoListingSection>
-        </MyAds> */}
-        <ProfileItems></ProfileItems>
-      </PageContentWrapper>
-      {/* <MyMessages></MyMessages> */}
-    </Container>
+  useEffect(() => {
+    console.log("Hello im on");
+    const getProfileInfo = async () => {
+      const response = await fetch(`/api/get-user-info/${_id}`);
+      const result = await response.json();
+      console.log("Product Response", result);
+      console.log("Product Response DATA USer Info", result.data.userInfo);
+      setProfileInfo(result.data.userInfo);
+      setLoaded(true);
+    };
+    getProfileInfo();
+    console.log("Profile Info", profileInfo);
+  }, []);
+
+  return (
+    <>
+      {isLoaded ? (
+        <Container>
+          <PageContentWrapper>
+            <ProfileContent>
+              {profileInfo.imageSrc ? (
+                <PhotoWrapper>
+                  <ProfilePhoto
+                    src={`/images/${profileInfo.imageSrc}`}
+                  ></ProfilePhoto>
+                </PhotoWrapper>
+              ) : (
+                <PhotoWrapper>
+                  <UserIcon />
+                </PhotoWrapper>
+              )}
+
+              {latestUser.email_verified ? (
+                <Verified>Verified</Verified>
+              ) : (
+                <Unverified>Unverified</Unverified>
+              )}
+              <Name>{profileInfo.firstName + " " + profileInfo.lastName}</Name>
+              <Email>{profileInfo.email}</Email>
+              <PhoneNumber>{profileInfo.phonenumber}</PhoneNumber>
+              <Location>{profileInfo.location}</Location>
+              <Link to={`/editprofile/${_id}`}>
+                <EditProfile>Edit Profile</EditProfile>
+              </Link>
+            </ProfileContent>
+            {profileInfo.items.length < 1 ? (
+              <MyAds>
+                <NoListingSection>
+                  <NoListingImage src={noListing}></NoListingImage>
+                  <NoAdsFound>No Listings Found :( </NoAdsFound>
+                  <StyledLink to={"/postad"}>
+                    <PostAnAd>Click Here To Post An Ad Now! </PostAnAd>
+                  </StyledLink>
+                </NoListingSection>
+              </MyAds>
+            ) : (
+              <ProfileItems></ProfileItems>
+            )}
+          </PageContentWrapper>
+        </Container>
+      ) : (
+        <LoadingSpinnerWrapper>
+          <LoadingSpinner />
+        </LoadingSpinnerWrapper>
+      )}
+    </>
   );
 };
+
+const LoadingSpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 800px;
+  position: absolute;
+  top: 30%;
+  left: 40%;
+`;
+
+const PhotoWrapper = styled.div``;
+
+const Location = styled.h2`
+  margin-bottom: 10%;
+  color: #1d3557ff;
+`;
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;
@@ -120,10 +175,22 @@ const PageContentWrapper = styled.div`
 const NoListingImage = styled.img`
   width: 60%;
   height: auto;
-  /* margin-bottom: 10%; */
 `;
 
-const EditProfile = styled.button``;
+const EditProfile = styled.button`
+  margin-right: 10px;
+  width: 100%;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  background-color: #e63946ff;
+  cursor: pointer;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -137,8 +204,8 @@ const ProfileContent = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid #457b9dff;
-  width: 30%;
-  height: 30vh;
+  width: 35%;
+  height: 300px;
   align-items: center;
   margin-top: 10%;
   border-radius: 15px;
@@ -149,14 +216,15 @@ const Name = styled.h1`
   margin-bottom: 5%;
   font-size: 1.4rem;
 `;
-const ProfilePhoto = styled.div`
+const ProfilePhoto = styled.img`
   margin-top: 10%;
   border-radius: 50%;
-  /* border: solid 1px; */
-  /* width: 100px; */
-  /* height: 100px; */
+  border: solid 3px #a8dadcff;
+  padding: 3px;
+  width: 90px;
+  height: 90px;
   margin-bottom: 5%;
-  /* align-items: center; */
+  transition: ease-in-out 0.2s;
 `;
 const Email = styled.h2`
   margin-bottom: 5%;
@@ -168,5 +236,4 @@ const PhoneNumber = styled.h2`
 `;
 const MyAds = styled.div``;
 
-const MyMessages = styled.div``;
 export default ProfilePage;

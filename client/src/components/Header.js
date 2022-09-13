@@ -9,10 +9,11 @@ import LoginButton from "./LoginButton";
 const Header = () => {
   const data = useContext(InformationContext);
 
-  const { latestUser, logout, currentUserId } = data;
+  const { latestUser, logout, currentUserId, profileInfo } = data;
   const pathname = window.location.pathname;
   console.log("PATH NAME", pathname);
-
+  console.log("curent user id", currentUserId);
+  console.log("curent user profile info", profileInfo);
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
 
@@ -71,15 +72,17 @@ const Header = () => {
         </SearchContainer>
         {latestUser ? (
           <>
-            {/* <FontAwesomeIcon icon={faEnvelope} /> */}
             <Dropdown>
               <DropdowButton onClick={() => console.log("Im here")}>
-                <FaUserAlt
-                  color="#457b9dff"
-                  background-color="yellow"
-                  size={30}
-                  icon="fa-solid fa-user fa-lg fa-3x"
-                />
+                {profileInfo.imageSrc ? (
+                  <ProfilePhoto
+                    src={`/images/${profileInfo.imageSrc}`}
+                  ></ProfilePhoto>
+                ) : (
+                  <PhotoWrapper>
+                    <UserIcon />
+                  </PhotoWrapper>
+                )}
 
                 <DropdownContentWrapper>
                   <DropDownContent to={`/profile/${currentUserId}`}>
@@ -101,19 +104,40 @@ const Header = () => {
             )}
           </>
         ) : (
-          // <Link to={"/profile"}>
-          // </Link>
           <LoginButton></LoginButton>
-          // <Icon>
-          //   <FaUserAlt />
-          // </Icon>
         )}
       </Navigation>
     </Wrapper>
   );
 };
 
+const UserIcon = styled(FaUserAlt)`
+  font-size: 60px;
+  color: #457b9dff;
+  border: solid 3px #a8dadcff;
+  border: solid 3px;
+  padding: 3%;
+  transition: ease-in-out 0.2s;
+`;
+
+const PhotoWrapper = styled.div`
+  width: 100%;
+`;
+
+const ProfilePhoto = styled.img`
+  margin-top: 10%;
+  border-radius: 50%;
+  border: solid 3px #a8dadcff;
+  padding: 3px;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 5%;
+  transition: ease-in-out 0.2s;
+`;
+
 const PostAd = styled.button`
+  margin-left: 10px;
+  margin-right: 40px;
   width: 120%;
   height: 30px;
   border: none;
@@ -133,19 +157,22 @@ const DropdownContentWrapper = styled.div`
   background-color: #f1f1f1;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 9999999;
 `;
 
 const Dropdown = styled.div`
   position: relative;
+  margin-left: 10px;
+
   display: inline-block;
   &:hover {
-    display: block;
+    ${DropdownContentWrapper} {
+      display: block;
+    }
   }
 `;
 
-const DropdowButton = styled.button`
-  /* background-color: #04aa6d; */
+const DropdowButton = styled.div`
   width: 45%;
   height: auto;
   border-radius: 50%;
@@ -185,8 +212,8 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 30px;
-  margin-bottom: 10px;
-  width: 80%;
+  margin-bottom: 20px;
+  width: 90%;
   height: 40px;
   margin-left: auto;
   margin-right: auto;
@@ -200,23 +227,30 @@ const Navigation = styled.div`
 `;
 
 const LinkDiv = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  text-align: center;
   margin-right: 20px;
   margin-top: 9px;
 `;
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;
-  color: var(--primary-color);
-  font-family: var(--font-family);
-  margin-left: 16px;
-  letter-spacing: -0.05em;
-  display: inline-block;
-  font-weight: 400;
 
+  color: var(--primary-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  width: 80px;
   &::after {
     content: "";
     display: block;
     margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   &:hover {
@@ -233,7 +267,7 @@ const StyledLink = styled(NavLink)`
     margin-top: 7px;
     margin-left: auto;
     margin-right: auto;
-    width: 75%;
+    width: 80%;
     height: 3px;
     background-color: var(--pink);
   }

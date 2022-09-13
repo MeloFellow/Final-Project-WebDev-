@@ -17,7 +17,56 @@ const ObjectID = require("mongodb").ObjectID;
 // EDIT USER INFO
 
 const editUser = async (req, res) => {
-  const { profile } = req.body;
+  const { file } = req;
+  console.log("Hello Conneted");
+  const profileId = req.params._id;
+  console.log("requested body", req.body);
+  const client = new MongoClient(MONGO_URI, options);
+  const adObject = JSON.parse(JSON.stringify(req.body));
+  console.log("AD object first name", adObject.firstName);
+  try {
+    await client.connect();
+    const result = await uploadFile(file);
+    const profileData = {
+      firstName: adObject.firstName,
+      lastName: adObject.lastName,
+      email: adObject.email,
+      phonenumber: adObject.phonenumber,
+      description: adObject.description,
+      location: adObject.location,
+      imageSrc: result.Key,
+    };
+    const db = client.db("Numelo");
+
+    const currentProdileInfo = await db
+      .collection("Users")
+      .findOne({ _id: ObjectId(profileId) });
+
+    const UpdatedUser = await db.collection("Users").updateOne(
+      { _id: ObjectId(profileId) },
+      {
+        $set: {
+          firstName: adObject.firstName,
+          lastName: adObject.lastName,
+          email: adObject.email,
+          phonenumber: adObject.phonenumber,
+          location: adObject.location,
+          imageSrc: result.Key,
+        },
+      }
+    );
+
+    res.status(200).json({
+      status: 200,
+      data: UpdatedUser,
+      message: "Your reservation has been updated",
+    });
+
+    client.close();
+    console.log("disconnected!");
+  } catch (err) {
+    console.log("Error: ", err);
+  }
 };
 
 // POST ITEM TO DATABASE
@@ -29,7 +78,7 @@ const postItem = async (req, res) => {
   console.log({ file });
 
   const adObject = JSON.parse(JSON.stringify(req.body));
-
+  console.log("AD object", adObject);
   const test = req.body;
 
   const client = new MongoClient(MONGO_URI, options);
@@ -54,13 +103,12 @@ const postItem = async (req, res) => {
     const db = client.db("Numelo");
     const itemResult = await db.collection("Items").insertOne(itemData);
 
-    client.close();
-
     res.status(200).json({
       status: 200,
-      data: itemResult,
+      data: itemData,
       message: `Item Created!`,
     });
+    client.close();
   } catch (err) {
     console.log("Error: ", err);
   }
@@ -132,6 +180,40 @@ const getUserInfo = async (req, res) => {
     client.close();
   } catch (err) {
     console.log("Error connecting", err);
+  }
+};
+
+// Search for a product
+
+const findProducts = async (req, res) => {
+  const query = req.params.query;
+  const client = new MongoClient(MONGO_URI);
+  try {
+    await client.connect();
+    const db = client.db("Numelo");
+    const result = await db
+      .collection("Items")
+      // Find the items which their name includes the search term(query), "options i" is for case insensitivity
+      .find({ name: { $regex: query, $options: "i" } })
+      .toArray();
+
+    client.close();
+
+    // const editedResult = result.length > 0 && addIntPriceKey(result);
+
+    result.length > 0
+      ? res.status(200).json({
+          status: 200,
+          data: result,
+          message: `Products found!`,
+        })
+      : res.status(404).json({
+          status: 404,
+          data: `search term: ${query}`,
+          message: `Couldn't find any product!`,
+        });
+  } catch (err) {
+    console.log("Error: ", err);
   }
 };
 
@@ -339,4 +421,5 @@ module.exports = {
   getItem,
   editUser,
   getUserItems,
+  findProducts,
 };

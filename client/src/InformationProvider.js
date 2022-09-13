@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-// import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const InformationContext = createContext(null);
@@ -8,7 +7,9 @@ export const InformationProvider = ({ children }) => {
   const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
   console.log("running provider");
   const [latestUser, setLatestUser] = useState();
+  const [isLoaded, setLoaded] = useState(false);
   const [currentUserId, setCurrentUserId] = useState();
+  const [profileInfo, setProfileInfo] = useState([]);
   const [categories, setCategories] = useState([
     "All",
     "Real Estate",
@@ -61,29 +62,26 @@ export const InformationProvider = ({ children }) => {
     }
   };
 
-  // const createUserinDb = async (user) => {
-  //   console.log("user in create user", user);
-  //   const rawRes = await fetch("api/create-user", {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: {
-  //       firstName: user.firstName,
-  //       lastName: user.lastName,
-  //       email: user.email,
-  //     },
-  //   });
-  //   const res = await rawRes.json();
-  //   console.log("rea", res);
-  // };
+  useEffect(() => {
+    console.log("Hello im on");
+    console.log("current id in get profile info", currentUserId);
 
-  // console.log("ALL ITEMS", allItems);
+    const getProfileInfo = async () => {
+      const response = await fetch(`/api/get-user-info/${currentUserId}`);
+      const result = await response.json();
+      console.log("Product Response", result);
+      console.log("Product Response DATA USer Info", result.data.userInfo);
+      setProfileInfo(result.data.userInfo);
+      setLoaded(true);
+    };
+    getProfileInfo();
+    console.log("Profile Info", profileInfo);
+  }, [currentUserId]);
 
   return (
     <InformationContext.Provider
       value={{
+        profileInfo,
         latestUser,
         setLatestUser,
         createUserinDb,

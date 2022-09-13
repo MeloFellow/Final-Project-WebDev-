@@ -1,7 +1,5 @@
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-// import cartIcon from "../assets/cart.svg";
-// import viewIcon from "../assets/search.svg";
 
 import search from "../assets/view.svg";
 
@@ -143,7 +141,6 @@ const Price = styled.h1`
 const ItemDescription = styled.h2`
   width: 228px;
   color: black;
-  /* height: 60px; */
   font-family: var(--font-family);
   font-weight: 400;
   line-height: 125%;
@@ -167,13 +164,11 @@ const PriceWrapper = styled.div`
 const ProductCardWrapper = styled.span`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   width: 100%;
   height: 100%;
   padding: 8%;
   box-sizing: border-box;
   border: 1px solid var(--lightest-grey);
-  /* box-shadow: 0px 8px 17px -3px rgba(24, 39, 75, 0.07); */
   border-radius: 7px;
   background-color: #fff;
 `;

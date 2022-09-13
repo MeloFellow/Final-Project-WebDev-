@@ -4,20 +4,17 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ItemCard from "../components/ItemCard";
 import styled from "styled-components";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Categories = () => {
   let { category } = useParams();
-  const [category1, setCategory1] = useState();
   const [productArray, setProductArray] = useState();
   const [isLoaded, setLoaded] = useState(false);
-  console.log("Category", category);
 
   useEffect(() => {
     const fetchItems = async () => {
       const response = await fetch(`/api/get-${category}`);
-      console.log("RESPONSE", response);
       const result = await response.json();
-      console.log("RESULT", result);
       setProductArray(result.data);
       setLoaded(true);
     };
@@ -25,7 +22,6 @@ const Categories = () => {
   }, [category]);
 
   return (
-    // <></>
     <>
       <BiggerWrapper>
         <Wrapper>
@@ -34,13 +30,24 @@ const Categories = () => {
               return <ItemCard itemInformation={itemInformation} key={index} />;
             })
           ) : (
-            <></>
+            <LoadingSpinnerWrapper>
+              <LoadingSpinner />
+            </LoadingSpinnerWrapper>
           )}
         </Wrapper>
       </BiggerWrapper>
     </>
   );
 };
+
+const LoadingSpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 800px;
+  position: absolute;
+  top: 30%;
+  left: 40%;
+`;
 
 const BiggerWrapper = styled.div`
   display: flex;
