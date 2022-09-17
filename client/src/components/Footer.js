@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import logo from "../assets/NumeloLogo.jpg";
+import logo from "../assets/NumeloLogo1.jpg";
 import { SiFacebook, SiTwitter, SiLinkedin, SiInstagram } from "react-icons/si";
 
 const Footer = () => {
@@ -14,7 +14,7 @@ const Footer = () => {
           {otherPages.map((page, index) => {
             return (
               <StyledLink
-                to={`/${otherPages}`}
+                to="/other"
                 key={index}
                 onClick={() => window.scrollTo(0, 0)}
               >
@@ -40,6 +40,7 @@ const Wrapper = styled.div`
   width: 100%;
   left: 0;
   bottom: 0;
+  /* height: 20vh; */
   margin-top: auto;
   color: white;
   text-align: center;
@@ -65,9 +66,9 @@ const SocialsContainer = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 224px;
-  height: 49px;
-  margin-bottom: 10px;
+  width: auto;
+  height: 120px;
+  /* margin-bottom: 10px; */
 `;
 
 const FacebookIcon = styled(SiFacebook)`

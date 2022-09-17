@@ -88,13 +88,13 @@ const ItemDetailPage = () => {
               ) : (
                 <></>
               )}
+              <MessageWrapper>
+                <Message
+                  profileId={profileInfo.firstName}
+                  idOfAd={specificProduct._id}
+                ></Message>
+              </MessageWrapper>
             </ContentWrapper>
-            <MessageWrapper>
-              <Message
-                profileId={profileInfo.firstName}
-                idOfAd={specificProduct._id}
-              ></Message>
-            </MessageWrapper>
             {/* <Form action="mailto:adf.demelo@gmail.com" method="POST">
               <MessageWrapper>
                 <Message>Message: This Person</Message>
@@ -155,10 +155,9 @@ const MessageBox = styled.textarea`
 `;
 
 const MessageWrapper = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 3%; */
+  margin-left: 10%;
+  /* margin-right: 50%; */
+  margin-top: 10%;
   width: 20%;
 `;
 
@@ -168,6 +167,7 @@ const ImageWrapper = styled.div`
   width: 50%;
   align-items: right;
   justify-content: center;
+  margin-right: 5%;
   /* box-shadow: 1px 10px 15px rgba(0, 0, 0, 0.2); */
 `;
 
@@ -210,6 +210,8 @@ const Wrapper = styled.div`
   width: 90%;
   margin-top: 5%;
   margin-bottom: 5%;
+  margin-left: auto;
+  /* margin-right: auto; */
   /* height: 100%; */
 `;
 
@@ -253,7 +255,7 @@ const Location = styled.h2`
 `;
 
 const ItemImage = styled.img`
-  width: 80%;
+  width: 90%;
   height: auto;
   align-items: right;
   justify-content: right;

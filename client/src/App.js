@@ -55,6 +55,9 @@ const App = () => {
               <Route exact path="/messages">
                 <ConstructionPage />
               </Route>
+              <Route exact path="/other">
+                <ConstructionPage />
+              </Route>
               <Route exact path="/search/:query">
                 <SearchPage />
               </Route>
