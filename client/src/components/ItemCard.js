@@ -113,12 +113,14 @@ const Overlay = styled.span`
 
 const Wrapper = styled.div`
   position: relative;
-  width: 300px;
+  width: 100%;
   height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 1px 10px 15px rgba(0, 0, 0, 0.2);
 
   &:hover ${Overlay} {
     opacity: 0.5;

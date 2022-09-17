@@ -36,6 +36,9 @@ const Wrapper = styled.div`
   grid-column-gap: 30px;
   grid-row-gap: 30px;
   margin-bottom: 60px;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
 `;
 
 export default HomepageItems;

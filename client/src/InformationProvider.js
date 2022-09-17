@@ -61,6 +61,7 @@ export const InformationProvider = ({ children }) => {
       console.log(err, "Error");
     }
   };
+  console.log("this is the USER", user);
 
   useEffect(() => {
     console.log("Hello im on");
@@ -74,7 +75,9 @@ export const InformationProvider = ({ children }) => {
       setProfileInfo(result.data.userInfo);
       setLoaded(true);
     };
-    getProfileInfo();
+    if (user) {
+      getProfileInfo();
+    }
     console.log("Profile Info", profileInfo);
   }, [currentUserId]);
 

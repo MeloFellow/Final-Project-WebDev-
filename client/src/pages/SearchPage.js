@@ -23,17 +23,27 @@ const SearchPage = () => {
   }, [query]);
 
   return (
-    <Wrapper>
-      {isLoaded ? (
-        searchResults.map((itemInformation, index) => {
-          return <ItemCard itemInformation={itemInformation} key={index} />;
-        })
-      ) : (
-        <></>
-      )}
-    </Wrapper>
+    <PageWrapper>
+      <Wrapper>
+        {isLoaded ? (
+          searchResults.map((itemInformation, index) => {
+            return <ItemCard itemInformation={itemInformation} key={index} />;
+          })
+        ) : (
+          <></>
+        )}
+      </Wrapper>
+    </PageWrapper>
   );
 };
+
+const PageWrapper = styled.div`
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%;
+  margin-top: 2%;
+`;
 
 const Wrapper = styled.div`
   display: grid;
@@ -41,6 +51,9 @@ const Wrapper = styled.div`
   grid-column-gap: 30px;
   grid-row-gap: 30px;
   margin-bottom: 60px;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
 `;
 
 export default SearchPage;

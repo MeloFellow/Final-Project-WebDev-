@@ -8,7 +8,37 @@ const PORT = 8000;
 const { MongoClient } = require("mongodb");
 const { MONGO_URI } = process.env;
 const app = express();
-const http = require("http");
+const server = require("http").Server(app);
+const { Server } = require("socket.io");
+
+// THIS IS FOR SOCKET IO
+
+const io = require("socket.io")(server, {
+  rejectUnauthorized: false,
+  cors: true,
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("socket ID", socket.id);
+  // open chat
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log("USER WITH ID", socket.id, "JOINED ROOM", data);
+  });
+
+  socket.on("send_message", (data) => {
+    console.log("Message Data", data);
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected", socket.id);
+  });
+});
 
 const options = {
   useNewUrlParser: true,
@@ -43,10 +73,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // this endpoints will request the image from S3
 app.get("/images/:key", async (req, res) => {
-  console.log(req.params);
   try {
     const { key } = await req.params;
-    console.log(key);
+    // console.log(key);
     const readStream = getFileStream(key);
     readStream.pipe(res);
   } catch {
@@ -68,4 +97,5 @@ app.get("/api/get-vehicles", getVehicles);
 app.get("/api/get-item/:_id", getItem);
 app.post("/api/edit-user/:_id", upload.single("image"), editUser);
 app.get("/api/find-products/:query", findProducts);
-app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
+server.listen(8000, () => console.info(`Listening on port ${PORT}`));
+// app.listen(PORT, () => console.info(`Listening on port ${PORT}`));

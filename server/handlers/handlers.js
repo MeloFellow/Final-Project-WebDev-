@@ -18,12 +18,12 @@ const ObjectID = require("mongodb").ObjectID;
 
 const editUser = async (req, res) => {
   const { file } = req;
-  console.log("Hello Conneted");
+  // console.log("Hello Conneted");
   const profileId = req.params._id;
-  console.log("requested body", req.body);
+  // console.log("requested body", req.body);
   const client = new MongoClient(MONGO_URI, options);
   const adObject = JSON.parse(JSON.stringify(req.body));
-  console.log("AD object first name", adObject.firstName);
+  // console.log("AD object first name", adObject.firstName);
   try {
     await client.connect();
     const result = await uploadFile(file);
@@ -75,10 +75,10 @@ const postItem = async (req, res) => {
   const { file } = req;
   const { name } = req;
   const { email } = req.body;
-  console.log({ file });
+  // console.log({ file });
 
   const adObject = JSON.parse(JSON.stringify(req.body));
-  console.log("AD object", adObject);
+  // console.log("AD object", adObject);
   const test = req.body;
 
   const client = new MongoClient(MONGO_URI, options);
@@ -143,8 +143,6 @@ const getAllUsers = async (req, res) => {
     await client.connect();
     const db = client.db("Numelo");
     const result = await db.collection("Users").find().toArray();
-    console.log("Connected to MongoDB");
-    console.log("USERS", result);
     client.close();
     res.json({ status: 200, data: result, message: "The USERS" });
     client.close();
@@ -157,20 +155,19 @@ const getAllUsers = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI);
+  console.log("trying to get user info");
   try {
     await client.connect();
     const db = client.db("Numelo");
 
     const userId = req.params._id;
-    console.log("These are the req params", userId);
+
     const userInfo = await db
       .collection("Users")
       .findOne({ _id: ObjectId(userId) });
 
     const userItems = userInfo.items;
-    console.log("Connected to MongoDB");
-    console.log("USER INFO", userInfo);
-    console.log("user items", userItems);
+
     client.close();
     res.json({
       status: 200,
@@ -222,17 +219,14 @@ const findProducts = async (req, res) => {
 const createUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI);
   try {
-    console.log("req body", req.body);
     await client.connect();
     const db = client.db("Numelo");
-    console.log("Connected to MongoDB");
+
     const requestedEmail = req.body.email;
 
     const isEmail = await db
       .collection("Users")
       .findOne({ email: req.body.email });
-
-    console.log("is Email?", isEmail);
 
     const newUser = {
       firstName: req.body.firstName,
@@ -266,8 +260,7 @@ const getUserItems = async (req, res) => {
   const client = new MongoClient(MONGO_URI);
   const db = client.db("Numelo");
   const userId = req.params._id;
-  console.log("connected");
-  console.log("USer ID", userId);
+
   try {
     await client.connect();
     // const result = await db.collection("Items").findOne({ owner: userId });
@@ -282,8 +275,6 @@ const getUserItems = async (req, res) => {
       data: result,
       message: "The USERS",
     });
-
-    console.log("Item", result);
   } catch (err) {
     console.log("Error: ", err);
   }
@@ -295,13 +286,12 @@ const getItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI);
   const _id = req.params._id;
   const db = client.db("Numelo");
-  console.log("connected");
-  console.log("_ID", _id);
+
   try {
     await client.connect();
     console.log("connected");
     const result = await db.collection("Items").findOne({ _id: ObjectId(_id) });
-    console.log("item details result: ", result);
+
     client.close();
 
     result
@@ -330,7 +320,7 @@ const getRealEstate = async (req, res) => {
       .collection("Items")
       .find({ category: "Real Estate" })
       .toArray();
-    console.log("RESULT", result);
+
     client.close();
     res.status(200).json({
       status: 200,
@@ -352,7 +342,7 @@ const getTools = async (req, res) => {
       .collection("Items")
       .find({ category: "Tools" })
       .toArray();
-    console.log("RESULT", result);
+
     client.close();
     res.status(200).json({
       status: 200,
@@ -374,7 +364,7 @@ const getToys = async (req, res) => {
       .collection("Items")
       .find({ category: "Toys" })
       .toArray();
-    console.log("RESULT", result);
+
     client.close();
     res.status(200).json({
       status: 200,
@@ -396,7 +386,7 @@ const getVehicles = async (req, res) => {
       .collection("Items")
       .find({ category: "Vehicles" })
       .toArray();
-    console.log("RESULT", result);
+    // console.log("RESULT", result);
     client.close();
     res.status(200).json({
       status: 200,

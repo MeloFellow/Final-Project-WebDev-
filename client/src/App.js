@@ -7,18 +7,27 @@ import GlobalStyles from "./GlobalStyles";
 import SimpleRegistration from "./pages/SimpleRegistration";
 import ItemDetailPage from "./pages/ItemDetailPage";
 import PostAd from "./pages/PostAd";
+import Message from "./pages/Message";
 import "./App.css";
 import ProfilePage from "./pages/ProfilePage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import Footer from "./components/Footer";
 import SearchPage from "./pages/SearchPage";
 import EditProfilePage from "./pages/EditProfilePage";
+import ConstructionPage from "./pages/ConstructionPage.js";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:8000");
+console.log("SOCKET", socket.connected);
+
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <AppWrapper>
-          <Header />
+          <HeaderWrapper>
+            <Header />
+          </HeaderWrapper>
           <GlobalStyles />
           <Wrapper>
             <Switch>
@@ -40,8 +49,11 @@ const App = () => {
               <Route exact path="/postad">
                 <PostAd />
               </Route>
-              <Route exact path="/confirmed">
+              <Route path="/confirmed/:_id">
                 <ConfirmationPage />
+              </Route>
+              <Route exact path="/messages">
+                <ConstructionPage />
               </Route>
               <Route exact path="/search/:query">
                 <SearchPage />
@@ -49,6 +61,9 @@ const App = () => {
               <Route exact path="/editprofile/:_id">
                 <EditProfilePage />
               </Route>
+              {/* <Route exact path="/message">
+                <Message />
+              </Route> */}
             </Switch>
           </Wrapper>
           <Footer />
@@ -57,11 +72,16 @@ const App = () => {
     </>
   );
 };
+
+const HeaderWrapper = styled.div`
+  max-width: 100%;
+`;
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
+  max-width: 100%;
 `;
 
 const Wrapper = styled.div`

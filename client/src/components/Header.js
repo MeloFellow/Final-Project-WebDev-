@@ -2,9 +2,10 @@ import { useContext, useState } from "react";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import { InformationContext } from "../InformationProvider";
 import styled from "styled-components";
-import NumeloLogo from "../assets/NumeloLogo.jpg";
+import NumeloLogo from "../assets/NumeloLogo1.jpg";
 import { FaUserAlt } from "react-icons/fa";
 import LoginButton from "./LoginButton";
+import Searchbox from "./Searchbox";
 
 const Header = () => {
   const data = useContext(InformationContext);
@@ -23,9 +24,11 @@ const Header = () => {
 
   return (
     <Wrapper>
-      <Link to="/">
-        <ImageLogo src={NumeloLogo} />
-      </Link>
+      <ImageWrapper>
+        <Link to="/">
+          <ImageLogo src={NumeloLogo} />
+        </Link>
+      </ImageWrapper>
       <Navigation>
         <LinkDiv>
           <StyledLink to="/category/all">All</StyledLink>
@@ -57,23 +60,12 @@ const Header = () => {
             Toys
           </StyledLink>
         </LinkDiv>
-        <SearchContainer>
-          <SearchInput
-            placeholder="Search product here"
-            onChange={searchChange}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                history.push(`/search/${searchText}`);
-                window.location.reload();
-              }
-            }}
-          />
-          <SearchButton onClick={() => history.push(`/search/${searchText}`)} />
-        </SearchContainer>
+
+        <Searchbox />
         {latestUser ? (
           <>
             <Dropdown>
-              <DropdowButton onClick={() => console.log("Im here")}>
+              <DropdowButton>
                 {profileInfo.imageSrc ? (
                   <ProfilePhoto
                     src={`/images/${profileInfo.imageSrc}`}
@@ -88,7 +80,7 @@ const Header = () => {
                   <DropDownContent to={`/profile/${currentUserId}`}>
                     Profile
                   </DropDownContent>
-                  <DropDownContent to={"/profile"}>Messages</DropDownContent>
+                  <DropDownContent to={"/messages"}>Messages</DropDownContent>
                   <DropDownContent onClick={() => logout()} to={"/"}>
                     Logout
                   </DropDownContent>
@@ -110,6 +102,12 @@ const Header = () => {
     </Wrapper>
   );
 };
+const ImageWrapper = styled.div`
+  display: flex;
+  width: 20%;
+  justify-content: center;
+  align-items: center;
+`;
 
 const UserIcon = styled(FaUserAlt)`
   font-size: 60px;
@@ -117,6 +115,7 @@ const UserIcon = styled(FaUserAlt)`
   border: solid 3px #a8dadcff;
   border: solid 3px;
   padding: 3%;
+  border-radius: 50%;
   transition: ease-in-out 0.2s;
 `;
 
@@ -138,7 +137,7 @@ const ProfilePhoto = styled.img`
 const PostAd = styled.button`
   margin-left: 10px;
   margin-right: 40px;
-  width: 120%;
+  width: 100%;
   height: 30px;
   border: none;
   border-radius: 10px;
@@ -212,9 +211,9 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 30px;
-  margin-bottom: 20px;
-  width: 90%;
-  height: 40px;
+  margin-bottom: 10px;
+  width: 85%;
+  height: 8vh;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -228,7 +227,7 @@ const Navigation = styled.div`
 
 const LinkDiv = styled.div`
   display: flex;
-  width: 100%;
+  width: 120%;
   align-items: center;
   text-align: center;
   margin-right: 20px;
@@ -237,14 +236,14 @@ const LinkDiv = styled.div`
 
 const StyledLink = styled(NavLink)`
   text-decoration: none;
-
+  font-size: 1.2em;
   color: var(--primary-color);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   margin-left: auto;
   margin-right: auto;
   font-weight: 600;
-  width: 80px;
+  width: 100px;
   &::after {
     content: "";
     display: block;
@@ -277,9 +276,9 @@ const StyledLink = styled(NavLink)`
 `;
 
 const ImageLogo = styled.img`
-  width: 300px;
+  width: 100%;
   height: auto;
-  margin-bottom: 8px;
+  margin-top: 3%;
 `;
 
 const SearchContainer = styled.div`

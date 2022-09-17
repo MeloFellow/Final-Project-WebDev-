@@ -12,8 +12,6 @@ const EditProfilePage = () => {
   const [location, setLocation] = useState("");
   const [image, setImage] = useState();
 
-  console.log("currentUserId", _id);
-
   const patchProfileInformation = async () => {
     console.log(`PATCH ProfileInformation function is called`);
     const formData = new FormData();
@@ -26,8 +24,6 @@ const EditProfilePage = () => {
 
     const formDataObj = Object.fromEntries(formData.entries());
 
-    console.log("FORM DATA OBJ", formDataObj);
-
     const response = await fetch(`/api/edit-user/${_id}`, {
       method: "POST",
       body: formData,
@@ -37,7 +33,7 @@ const EditProfilePage = () => {
       history.push(`/profile/${_id}`);
       return response;
     }
-    console.log("RESPONSE", response);
+
     return response;
   };
 

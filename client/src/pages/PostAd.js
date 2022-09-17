@@ -11,9 +11,6 @@ const PostAd = () => {
 
   const history = useHistory();
 
-  // const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
-  // console.log("USER SIGNED IN IN POST AD", user);
-
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
@@ -43,18 +40,24 @@ const PostAd = () => {
     formData.append("available", available);
     formData.append("owner", currentUserId);
     console.log("FORM DATA", formData);
-    const response = await fetch("/api/post-item", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      "/api/post-item",
+      {
+        method: "POST",
+        body: formData,
+      }
+      // console.log("response", response)
+    );
 
     if (response.status === 200) {
-      history.push("/confirmed");
+      const newItemId = await response.json();
+      console.log("item data", newItemId.data._id);
+      // console.log("RESPONSE Data", response.json().data);
+      history.push(`/confirmed/${newItemId.data._id}`);
       return response;
     }
     console.log("RESPONSE", response.status);
     console.log("RESPONSE", response);
-    console.log("RESPONSE Data", response);
     return response;
   };
 
@@ -193,7 +196,7 @@ const PostAd = () => {
                 <option value="3.5">1 Bedroom</option>
                 <option value="4.5">2 Bedroom</option>
                 <option value="5.5">3 Bedroom</option>
-                <option value="5.5">3 Bedroom</option>
+                <option value="5.5">4 Bedroom</option>
               </Size>
             </>
           ) : (
@@ -253,7 +256,7 @@ const FormWrapper = styled.div`
 `;
 
 const Background = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
   width: 100%;
   background: #0f2027;
   background: linear-gradient(to right, #2c5364, #203a43, #0f2027);

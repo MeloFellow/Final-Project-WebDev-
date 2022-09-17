@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useState } from "react";
 import styled from "styled-components";
-
+import Message from "./Message";
+import { InformationContext } from "../InformationProvider";
 const ItemDetailPage = () => {
+  const data = useContext(InformationContext);
+  const { profileInfo } = data;
+  console.log("PROFILE INFO", profileInfo);
   const [specificProduct, setSpecificProduct] = useState([]);
   const { _id } = useParams();
   console.log("id in params", _id);
   const [isLoaded, setLoaded] = useState(false);
+
   useEffect(() => {
     console.log("Hello im on");
     const getProductInfo = async () => {
@@ -18,9 +23,9 @@ const ItemDetailPage = () => {
       setLoaded(true);
     };
     getProductInfo();
-  }, []);
+  }, [_id]);
 
-  console.log("item page product", specificProduct.imageSrc);
+  console.log("item page product", specificProduct);
 
   return (
     <>
@@ -35,21 +40,62 @@ const ItemDetailPage = () => {
 
             <ContentWrapper>
               <NameWrapper>
-                <Name>{specificProduct.name} - </Name>
-                <Category>{specificProduct.category}</Category>
+                <Name>{specificProduct.name}</Name>
+                {/* <Category>{specificProduct.category}</Category> */}
               </NameWrapper>
               <Price>${specificProduct.price}</Price>
-              <ConditionWrapper>
-                <ConditionTag>Condition:</ConditionTag>
+              {specificProduct.condition !== undefined ? (
+                <TextWrapper>
+                  <LabelTag>Condition:</LabelTag>
+                  <Condition> {specificProduct.condition}</Condition>
+                </TextWrapper>
+              ) : (
+                <></>
+              )}
+              {/* <TextWrapper>
+                <LabelTag>Condition:</LabelTag>
                 <Condition> {specificProduct.condition}</Condition>
-              </ConditionWrapper>
-              <Description>{specificProduct.description}</Description>
-              <Location>{specificProduct.location}</Location>
-              <Mileage>{specificProduct.mileage}</Mileage>
-              <Year>{specificProduct.year}</Year>
-              <Size>{specificProduct.size}</Size>
+              </TextWrapper> */}
+              <TextWrapper>
+                <LabelTag>Description:</LabelTag>
+                <Description>{specificProduct.description}</Description>
+              </TextWrapper>
+              <TextWrapper>
+                <LabelTag>Location:</LabelTag>
+                <Location>{specificProduct.location}</Location>
+              </TextWrapper>
+              {specificProduct.mileage !== undefined ? (
+                <TextWrapper>
+                  <LabelTag>Mileage:</LabelTag>
+                  <Mileage>{specificProduct.mileage}</Mileage>
+                </TextWrapper>
+              ) : (
+                <></>
+              )}
+              {specificProduct.year !== undefined ? (
+                <TextWrapper>
+                  <LabelTag>Year:</LabelTag>
+                  <Year>{specificProduct.year}</Year>
+                </TextWrapper>
+              ) : (
+                <></>
+              )}
+              {specificProduct.size !== undefined ? (
+                <TextWrapper>
+                  <LabelTag>Size:</LabelTag>
+                  <Size>{specificProduct.size}</Size>
+                </TextWrapper>
+              ) : (
+                <></>
+              )}
             </ContentWrapper>
-            <Form action="mailto:adf.demelo@gmail.com" method="POST">
+            <MessageWrapper>
+              <Message
+                profileId={profileInfo.firstName}
+                idOfAd={specificProduct._id}
+              ></Message>
+            </MessageWrapper>
+            {/* <Form action="mailto:adf.demelo@gmail.com" method="POST">
               <MessageWrapper>
                 <Message>Message: This Person</Message>
                 <input
@@ -62,7 +108,7 @@ const ItemDetailPage = () => {
                   Send Message
                 </MessageButton>
               </MessageWrapper>
-            </Form>
+            </Form> */}
           </ItemWrapper>
         </Wrapper>
       ) : (
@@ -109,37 +155,44 @@ const MessageBox = styled.textarea`
 `;
 
 const MessageWrapper = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 3%;
+  margin-left: 3%; */
+  width: 20%;
 `;
 
-const Message = styled.h2``;
+// const Message = styled.h2``;
 const ImageWrapper = styled.div`
   display: flex;
   width: 50%;
   align-items: right;
   justify-content: center;
+  /* box-shadow: 1px 10px 15px rgba(0, 0, 0, 0.2); */
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 30%;
   margin-top: 2%;
   justify-content: center;
+  /* box-shadow: 3px 1px 10px 15px rgba(0, 0, 0, 0.2); */
 `;
 
-const ConditionWrapper = styled.div`
+const TextWrapper = styled.div`
   display: flex;
-  align-items: center;
-  margin-top: 2%;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  margin-top: 5px; ;
 `;
 
-const ConditionTag = styled.h1`
-  font-size: 1.4em;
+const LabelTag = styled.h1`
+  font-size: 1.2em;
   margin-right: 2%;
+  margin-top: 1%;
+  color: #457b9dff;
 `;
 
 const NameWrapper = styled.div`
@@ -151,10 +204,13 @@ const NameWrapper = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
   width: 90%;
   margin-top: 5%;
+  margin-bottom: 5%;
+  /* height: 100%; */
 `;
 
 const ItemWrapper = styled.div`
@@ -172,32 +228,32 @@ const Category = styled.h2`
 `;
 
 const Condition = styled.h2`
-  font-size: 1.4em;
-  color: #a8dadcff;
+  font-size: 1.3em;
+  color: #1d3557ff;
 `;
 
 const Price = styled.h2`
   font-size: 1.8em;
-  margin-top: 2%;
+  margin-top: 1%;
 `;
 const Year = styled.h2`
-  margin-top: 2%;
+  margin-top: 1%;
 `;
 const Size = styled.h2`
-  margin-top: 2%;
+  margin-top: 1%;
 `;
 const Mileage = styled.h2`
-  margin-top: 2%;
+  margin-top: 1%;
 `;
 const Description = styled.h2`
-  margin-top: 2%;
+  margin-top: 1%;
 `;
 const Location = styled.h2`
-  margin-top: 2%;
+  margin-top: 1%;
 `;
 
 const ItemImage = styled.img`
-  width: 55%;
+  width: 80%;
   height: auto;
   align-items: right;
   justify-content: right;
